@@ -34,46 +34,14 @@
 <script type="text/javascript">
     var svg = dimple.newSvg("#chartContainer", "100%", "100%");
     d3.csv("https://raw.githubusercontent.com/dfieldsarlington/landusetest/gh-pages/LandUse.csv", function (data) {
-     var myChart = new dimple.chart(svg, data);
-        myChart.setBounds("15%", "5%", "50%", "80%")
+     data = dimple.filterData(data, "Zone");
+        var myChart = new dimple.chart(svg, data);
+        myChart.setBounds(60, 30, 500, 330)
         myChart.addMeasureAxis("x", "Acres");
         myChart.addMeasureAxis("y", "# of Units");
-        myChart.addSeries("Zone", dimple.plot.bubble);
-		myChart.assignColor("B1", "#FFBEBE");
-		myChart.assignColor("B2A","#FF0000");
-		myChart.assignColor("I","#A900E6");
-        var LineLegend = myChart.addLegend ("70%", "10%", "10%", "90%", "right");
-	  LineLegend.fontSize = "auto";
-		var LineStoryboard = myChart.setStoryboard("Zone");
-		LineStoryboard.categoryFields = [null];
-		myChart.draw();
-		LineStoryboard.storyLabel.remove();
-        myChart.legends = [];
-        var filterValues = dimple.getUniqueValues(data, "Zone");
-        LineLegend.shapes.selectAll("rect")
-          .on("click", function (e) {
-            var hide = false;
-            var newFilters = [];
-            filterValues.forEach(function (f) {
-              if (f === e.aggField.slice(-1)[0]) {
-                hide = true;
-              } else {
-                newFilters.push(f);
-              }
-            });
-            if (hide) {
-              d3.select(this).style("opacity", 0.2);
-            } else {
-              newFilters.push(e.aggField.slice(-1)[0]);
-              d3.select(this).style("opacity", 0.8);
-            }
-            filterValues = newFilters;
-            myChart.data = dimple.filterData(data, "Zone", filterValues);
-			d3.selectAll("circle").style("stroke-width", 4);
-            myChart.draw(800);
-			
-          });
-		  
+        myChart.addSeries(["Zone"], dimple.plot.bubble);
+        myChart.addLegend(200, 10, 360, 20, "right");
+        myChart.draw();
       });
   </script>
   </body>
